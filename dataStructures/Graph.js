@@ -149,7 +149,7 @@ class Graph {
             if(edge.node1.value === currentNode.value){
                 if(!toVisit.includes(edge.node2) && !visited.includes(edge.node2.value)){   // checking if the new node connected to current node has been visited or is in the toVisit array
                     toVisit.push(edge.node2)    // pushing second node from current edge to toVisit array so the search is breadth-first
-                    predecessors.set(edge.node2,currentNode);  
+                    predecessors.set(edge.node2,currentNode); // add second node to predecessors map 
                 }
             }
         });
