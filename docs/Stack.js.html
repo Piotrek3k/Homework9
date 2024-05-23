@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Stack.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Stack.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+/**
+ * A Stack class representing a basic stack data structure.
+ */
+class Stack {
+    /**
+     * Constructor function that initializes an empty stack.
+     */
+    constructor() {
+        /**
+         * Array to store nodes in the stack.
+         * @type {Array}
+         * @private
+         */
+        this._nodes = []; // Initialize an array to store nodes.
+    }
+
+    /**
+     * Getter method for retrieving the array of nodes in the stack.
+     * @return {Array} The array of nodes.
+     */
+    get nodes() {
+        return this._nodes;
+    }
+
+    /**
+     * Method to add a new node to the top of the stack.
+     * @param {*} node - The node to add to the stack.
+     */
+    push(node) {
+        this._nodes.push(node); // Add the node to the end of the array.
+    }
+
+    /**
+     * Method to remove and return the top node from the stack.
+     * @return {*} The top node in the stack.
+     * @throws {Error} Throws an error if the stack is empty.
+     */
+    pop() {
+        if (this._nodes.length > 0) {
+            return this._nodes.pop(); // Remove and return the last element of the array.
+        } else {
+            throw new Error("Stack is empty"); // Throw an error if the stack is empty.
+        }
+    }
+
+    /**
+     * Method to return the value of the top node in the stack without removing it.
+     * @return {*} The value of the top node.
+     */
+    peek() {
+        return this._nodes[this._nodes.length - 1]; // Return the last element of the array.
+    }
+}
+
+/**
+ * A MinMaxStack class extending the Stack class with additional functionalities to get minimum and maximum values.
+ */
+class MinMaxStack extends Stack {
+    /**
+     * Constructor function that initializes an empty MinMaxStack.
+     */
+    constructor() {
+        super(); 
+        /**
+         * Array to store values for calculating min and max.
+         * @type {Array}
+         * @private
+         */
+        this._values = []; // Initialize an array to store values for calculating min and max.
+    }
+
+    /**
+     * Method to add a new node to the top of the stack and update min and max values accordingly.
+     * @param {*} node - The node to add to the stack.
+     */
+    push(node) {
+        super.push(node); // Call the push method of the parent class to add the node to the stack.
+        this._values.push(node.value); // Add the value of the node to the values array.
+        this._values.sort(); // Sort the values array.
+    }
+
+    /**
+     * Method to remove and return the top node from the stack and update min and max values accordingly.
+     * @return {*} The top node in the stack.
+     */
+    pop() {
+        const value = this.peek().value; // Get the value of the top node.
+        this._values = this._values.filter(e => e !== value); // Remove the value from the values array.
+        return super.pop(); // Call the pop method of the parent class to remove and return the node from the stack.
+    }
+
+    /**
+     * Method to return the maximum value in the stack.
+     * @return {*} The maximum value in the stack.
+     */
+    getMax() {
+        return this._values[this._values.length - 1]; // Return the last element of the values array.
+    }
+
+    /**
+     * Method to return the minimum value in the stack.
+     * @return {*} The minimum value in the stack.
+     */
+    getMin() {
+        return this._values[0]; // Return the first element of the values array.
+    }
+}
+
+module.exports = { Stack, MinMaxStack };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BinaryTree.html">BinaryTree</a></li><li><a href="BinaryTreeNode.html">BinaryTreeNode</a></li><li><a href="Graph.html">Graph</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="LinkedList.html">LinkedList</a></li><li><a href="LinkedListNode.html">LinkedListNode</a></li><li><a href="MinMaxStack.html">MinMaxStack</a></li><li><a href="Node.html">Node</a></li><li><a href="Queue.html">Queue</a></li><li><a href="Stack.html">Stack</a></li></ul><h3>Global</h3><ul><li><a href="global.html#findKeyWithLowestValue">findKeyWithLowestValue</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Thu May 23 2024 15:56:03 GMT+0200 (czas środkowoeuropejski letni)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
