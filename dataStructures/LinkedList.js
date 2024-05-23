@@ -1,31 +1,63 @@
-// Importing the Node class from the Node.js module.
+
 const Node = require("./Node.js");
 
-// A LinkedListNode class extending the Node class to represent nodes in a linked list.
+/**
+ * A LinkedListNode class extending the Node class to represent nodes in a linked list.
+ */
 class LinkedListNode extends Node {
+    /**
+     * Initializes a linked list node with a value and a reference to the next node.
+     * @param {*} value - The value of the node.
+     * @param {LinkedListNode} [next=null] - The reference to the next node.
+     */
     constructor(value, next = null) {
         super(value); 
+        /** 
+         * Reference to the next node in the linked list.
+         * @type {LinkedListNode}
+         * @private
+         */
         this._next = next; // Initialize the reference to the next node in the linked list.
     }
 
-    // Getter method to retrieve the reference to the next node.
+    /**
+     * Getter method to retrieve the reference to the next node.
+     * @return {LinkedListNode} The reference to the next node.
+     */
     get next() {
         return this._next;
     }
 
-    // Setter method to update the reference to the next node.
+    /**
+     * Setter method to update the reference to the next node.
+     * @param {LinkedListNode} value - The reference to the next node.
+     */
     set next(value) {
         this._next = value;
     }
 }
 
-// A LinkedList class representing a basic linked list data structure.
+/**
+ * A LinkedList class representing a basic linked list data structure.
+ */
 class LinkedList {
+    /**
+     * Initializes a linked list with an optional head node.
+     * @param {LinkedListNode} [head=null] - The head node of the linked list.
+     */
     constructor(head = null) {
+        /** 
+         * Reference to the head node of the linked list.
+         * @type {LinkedListNode}
+         * @private
+         */
         this._head = head; // Initialize the reference to the head node of the linked list.
     }
 
-    // Method to insert a new node into the linked list.
+    /**
+     * Method to insert a new node into the linked list.
+     * @param {LinkedListNode} node - The node to insert.
+     */
     insertNode(node) {
         if (this._head === null) {
             this._head = node; // If the linked list is empty, set the new node as the head.
@@ -34,7 +66,11 @@ class LinkedList {
         }
     }
 
-    // Method to recursively insert a new node after an existing node in the linked list.
+    /**
+     * Method to recursively insert a new node after an existing node in the linked list.
+     * @param {LinkedListNode} node - The node to insert.
+     * @param {LinkedListNode} existingNode - The existing node after which to insert.
+     */
     insertToExistingNode(node, existingNode) {
         if (existingNode.next === null) {
             existingNode.next = node; // If the next node is null, set the new node as the next node.
@@ -43,7 +79,10 @@ class LinkedList {
         }
     }
 
-    // Method to delete a node with a specific value from the linked list.
+    /**
+     * Method to delete a node with a specific value from the linked list.
+     * @param {*} value - The value of the node to delete.
+     */
     deleteNode(value) {
         if (this._head === value) {
             this._head = this._head.next; // If the head node has the target value, remove it.
@@ -52,7 +91,11 @@ class LinkedList {
         }
     }
 
-    // Method to recursively delete the next node with a specific value.
+    /**
+     * Method to recursively delete the next node with a specific value.
+     * @param {*} value - The value of the node to delete.
+     * @param {LinkedListNode} currentNode - The current node being examined.
+     */
     deleteNextNode(value, currentNode) {
         if (currentNode.next.value === value) {
             currentNode.next = currentNode.next.next; // If the next node has the target value, remove it.
@@ -63,7 +106,12 @@ class LinkedList {
         }
     }
 
-    // Method to search for a node with a specific value in the linked list.
+    /**
+     * Method to search for a node with a specific value in the linked list.
+     * @param {*} value - The value to search for.
+     * @param {LinkedListNode} [currentNode=this._head] - The current node being examined.
+     * @return {boolean} True if the value is found, otherwise false.
+     */
     search(value, currentNode = this._head) {
         if (currentNode === null) {
             return false; // If current node is null, value not found.
@@ -74,14 +122,17 @@ class LinkedList {
         }
     }
 
-    // Method to detect whether the linked list has a cycle using Floyd's Cycle Detection Algorithm (Tortoise and Hare algorithm)
+    /**
+     * Method to detect whether the linked list has a cycle using Floyd's Cycle Detection Algorithm (Tortoise and Hare algorithm).
+     * @return {boolean} True if a cycle is detected, otherwise false.
+     */
     hasCycle() {
         let slowPointer = this._head; // Initialize slow pointer at the head of the linked list.
         let fastPointer = this._head; // Initialize fast pointer at the head of the linked list.
-        while (fastPointer.next.next) { // Iterate through the linked list using two pointers.
+        while (fastPointer && fastPointer.next) { // Iterate through the linked list using two pointers.
             slowPointer = slowPointer.next; // Move slow pointer one step at a time.
             fastPointer = fastPointer.next.next; // Move fast pointer two steps at a time.
-            if (slowPointer.value === fastPointer.value) { // If slow and fast pointers meet, cycle detected.
+            if (slowPointer === fastPointer) { // If slow and fast pointers meet, cycle detected.
                 return true;
             }
         }

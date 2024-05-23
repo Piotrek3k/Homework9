@@ -1,42 +1,89 @@
-// Class representing a directed edge in a graph, connecting two nodes with an optional cost.
+
+/**
+ * Class representing a directed edge in a graph, connecting two nodes with an optional cost.
+ */
 class GraphEdge {
+    /**
+     * Creates a graph edge connecting two nodes with an optional cost.
+     * @param {Node} node1 - The first node of the edge.
+     * @param {Node} node2 - The second node of the edge.
+     * @param {number|null} [cost=null] - The cost associated with the edge (optional).
+     */
     constructor(node1, node2, cost = null) {
+        /** 
+         * The first node of the edge.
+         * @type {Node}
+         * @private
+         */
         this._node1 = node1; // Initialize the first node of the edge.
+        
+        /** 
+         * The second node of the edge.
+         * @type {Node}
+         * @private
+         */
         this._node2 = node2; // Initialize the second node of the edge.
+        
+        /** 
+         * The cost associated with the edge (optional).
+         * @type {number|null}
+         * @private
+         */
         this._cost = cost;   // Initialize the cost of the edge (optional).
     }
 
-    // Setter for the first node of the edge.
+    /**
+     * Setter for the first node of the edge.
+     * @param {Node} node - The node to set as the first node.
+     */
     set node1(node) {
         this._node1 = node;
     }
 
-    // Setter for the second node of the edge.
+    /**
+     * Setter for the second node of the edge.
+     * @param {Node} node - The node to set as the second node.
+     */
     set node2(node) {
         this._node2 = node;
     }
 
-    // Setter for the cost of the edge.
+    /**
+     * Setter for the cost of the edge.
+     * @param {number|null} cost - The cost to set.
+     */
     set cost(cost) {
         this._cost = cost;
     }
 
-    // Getter for the first node of the edge.
+    /**
+     * Getter for the first node of the edge.
+     * @return {Node} The first node of the edge.
+     */
     get node1() {
         return this._node1;
     }
 
-    // Getter for the second node of the edge.
+    /**
+     * Getter for the second node of the edge.
+     * @return {Node} The second node of the edge.
+     */
     get node2() {
         return this._node2;
     }
 
-    // Getter for the cost of the edge.
+    /**
+     * Getter for the cost of the edge.
+     * @return {number|null} The cost of the edge.
+     */
     get cost() {
         return this._cost;
     }
 
-    // Method to return a string representation of the edge.
+    /**
+     * Method to return a string representation of the edge.
+     * @return {string} A string representation of the edge.
+     */
     toString() {
         if (this._cost) {
             return `${this._node1._value}; ${this._node2._value}; cost: ${this._cost}`;
@@ -46,20 +93,43 @@ class GraphEdge {
     }
 }
 
-// Class representing a graph using adjacency list representation.
+/**
+ * Class representing a graph using adjacency list representation.
+ */
 class Graph {
+    /**
+     * Creates a new Graph instance.
+     */
     constructor() {
-        this._edges = []; // Initialize an array to store the edges of the graph.
-        this._nodes = []; // Initialize an array to store the nodes of the graph.
+        /** 
+         * An array to store the edges of the graph.
+         * @type {GraphEdge[]}
+         * @private
+         */
+        this._edges = [];
+
+        /** 
+         * An array to store the nodes of the graph.
+         * @type {Node[]}
+         * @private
+         */
+        this._nodes = [];
     }
 
-    // Method to add a node to the graph.
+    /**
+     * Method to add a node to the graph.
+     * @param {Node} node - The node to be added.
+     */
     addNode(node) {
         this._nodes.push(node);
         this._nodes.sort(); // Sort nodes for consistent ordering.
     }
 
-    // Method to add an edge to the graph.
+    /**
+     * Method to add an edge to the graph.
+     * @param {GraphEdge} graphEdge - The edge to be added.
+     * @throws {Error} If the graph does not contain at least one of the provided nodes.
+     */
     addEdge(graphEdge) {
         if (this._nodes.includes(graphEdge._node1) && this._nodes.includes(graphEdge._node2)) {
             this._edges.push(graphEdge);
@@ -69,7 +139,13 @@ class Graph {
         }
     }
 
-    // Method to perform a depth-first search (DFS) on the graph.
+    /**
+     * Method to perform a depth-first search (DFS) on the graph.
+     * @param {Array} [visited=[]] - An array to store visited nodes.
+     * @param {Array} [toVisit=[]] - An array to store nodes to visit.
+     * @param {Node} [node=this._nodes[0]] - The starting node for the search.
+     * @returns {Array} The visited nodes in DFS order.
+     */
     depthFirstSearch(visited = [], toVisit = [], node = this._nodes[0]) {
         visited.push(node.value)    // adding current node to visited array
         toVisit.shift() // removing current node from toVisit array    
@@ -89,8 +165,15 @@ class Graph {
             return this.depthFirstSearch(visited,toVisit,toVisit[0])    // recursivly going to first node from toVisit array
         }
     }
-    // Method to perform a breadth-first search (BFS) on the graph.
-    breadthFirstSearch(visited = [], toVisit = [], node = this._nodes[0]){
+
+    /**
+     * Method to perform a breadth-first search (BFS) on the graph.
+     * @param {Array} [visited=[]] - An array to store visited nodes.
+     * @param {Array} [toVisit=[]] - An array to store nodes to visit.
+     * @param {Node} [node=this._nodes[0]] - The starting node for the search.
+     * @returns {Array} The visited nodes in BFS order.
+     */
+    breadthFirstSearch(visited = [], toVisit = [], node = this._nodes[0]) {
         visited.push(node.value)    // adding current node to visited array
         toVisit.shift() // removing current node from toVisit array
         this._edges.forEach(edge => {   // checking for every edge if it starts with the current node
@@ -107,7 +190,12 @@ class Graph {
             return this.breadthFirstSearch(visited,toVisit,toVisit[0])  // recursivly going to first node from toVisit array
         }
     }
-    // Method to perform Dijkstra's algorithm to find the shortest paths from a given node.
+
+    /**
+     * Method to perform Dijkstra's algorithm to find the shortest paths from a given node.
+     * @param {Node} node - The starting node for Dijkstra's algorithm.
+     * @returns {Map} A map containing the shortest distances from the provided node to every other node.
+     */
     dijkstra(node) {
         // dijkstra algorithm to calculate the shortest path between two nodes
         const distances = new Map() // initializing new map with every node and distance to that node
@@ -123,26 +211,43 @@ class Graph {
 
         return this.dijkstraAlgorithm(distances, toVisit) // returning default dijkstra algorithm function
     }
-    // Helper method to implement Dijkstra's algorithm.
-    dijkstraAlgorithm(distances, toVisit)
-    {
-        const nodeValue = findKeyWithLowestValue(distances, toVisit)  // value of current node is the lowest value in distances map that hasn't been visited   
-        this._edges.forEach( edge => {
-            // searching for every edge that connects current node with another node and checking if the sum of cost of that edge and value in distance map is lower than the distance in distance map
-            if(edge.node1.value === nodeValue && edge.cost + distances.get(nodeValue) < distances.get(edge.node2.value)) {
-                distances.set(edge.node2.value, edge.cost + distances.get(nodeValue)) // if it is lower, then the distance in distance map is replaced by lower value
+    /**
+     * Helper method to implement Dijkstra's algorithm.
+     * @param {Map} distances - A map containing distances to nodes.
+     * @param {Set} toVisit - A set containing nodes to visit.
+     * @returns {Map} A map containing the shortest distances from the provided node to every other node.
+     */
+    dijkstraAlgorithm(distances, toVisit) {
+        const nodeValue = findKeyWithLowestValue(distances, toVisit); // Value of current node is the lowest value in distances map that hasn't been visited.
+
+        this._edges.forEach(edge => {
+            // Searching for every edge that connects current node with another node and checking if the sum of the cost of that edge and value in distance map is lower than the distance in the distance map.
+            if (edge.node1.value === nodeValue && edge.cost + distances.get(nodeValue) < distances.get(edge.node2.value)) {
+                distances.set(edge.node2.value, edge.cost + distances.get(nodeValue)); // If it is lower, then the distance in the distance map is replaced by a lower value.
             }
-        })
-        toVisit.delete(nodeValue) // removing current node from toVisit set
-        if(toVisit.size === 0){ // when all nodes were visited, return distances map as shortest distances between provided node and every other node in the graph
-            return distances 
-        }
-        else{
-            return this.dijkstraAlgorithm(distances,toVisit) // return dijkstraAlgorithm for next node with lowest value in distance map that hasn't been visited   
+        });
+
+        toVisit.delete(nodeValue); // Removing current node from toVisit set.
+
+        if (toVisit.size === 0) {
+            // When all nodes were visited, return distances map as shortest distances between provided node and every other node in the graph.
+            return distances;
+        } else {
+            // Return dijkstraAlgorithm for the next node with the lowest value in the distance map that hasn't been visited.
+            return this.dijkstraAlgorithm(distances, toVisit);
         }
     }
-    // Method to find the shortest path using BFS.
-    breadthFirstSearch_ShortestPath(startingNode,targetNode, currentNode = startingNode,visited = [], toVisit = [], predecessors = new Map()) {
+    /**
+     * // Method to find the shortest path using BFS.
+     * @param {Node} startingNode - The starting node for the search.
+     * @param {Node} targetNode - The target node to find the shortest path to.
+     * @param {Node} [currentNode=startingNode] - The current node being processed.
+     * @param {Array} [visited=[]] - An array to store visited nodes.
+     * @param {Array} [toVisit=[]] - An array to store nodes to visit.
+     * @param {Map} [predecessors=new Map()] - A map to store predecessors of nodes in the shortest path.
+     * @returns {Array} The shortest path from startingNode to targetNode.
+     */
+    breadthFirstSearch_ShortestPath(startingNode, targetNode, currentNode = startingNode, visited = [], toVisit = [], predecessors = new Map()) {
         visited.push(currentNode.value)    // adding current node to visited array
         toVisit.shift() // removing current node from toVisit array
         this._edges.forEach(edge => {   // checking for every edge if it starts with the current node
@@ -169,8 +274,14 @@ class Graph {
     }
 }
 
+
+/**
+ * // function to find the lowest value in a map with corresponding key
+ * @param {Map} distances - The map containing distances.
+ * @param {Set} toVisit - The set containing nodes to visit.
+ * @returns {any} The key with the lowest value.
+ */
 function findKeyWithLowestValue(distances, toVisit) {
-    // function to find the lowest value in a map with corresponding key
     let lowestValue = Infinity;
     let lowestKey = null;
   
@@ -182,6 +293,6 @@ function findKeyWithLowestValue(distances, toVisit) {
     }
   
     return lowestKey;
-  }
+}
 
-module.exports = {Graph, GraphEdge}
+module.exports = { Graph, GraphEdge };
